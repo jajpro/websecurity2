@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority(Role.ADMIN.getValue())  //해당 리소스 ADMIN 만 접근가능
                 .antMatchers("/members").hasAnyRole("ADMIN", "USER")    //hasRole 류는 "ROLE_" 를 자동 첨부
                 .antMatchers("/members/new").anonymous()    //해당 리소스 로그인 되지 않은 사용자만 접근가능
-                .antMatchers("/").permitAll()   //모든 사용자 접근가능
+                .antMatchers("/", "/api/**", "/swagger-ui.html").permitAll()   //모든 사용자 접근가능
                 .anyRequest().authenticated()   //모든 요청에 대해, 인증된 사용자만 접근하도록 설정
                 //로그인설정
                 .and()
