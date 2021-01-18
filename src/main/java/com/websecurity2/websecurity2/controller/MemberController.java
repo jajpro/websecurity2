@@ -25,12 +25,17 @@ public class MemberController {
 
     @PostMapping("/members/new")
     public String create(MemberForm form) {
+        //비밀번호 암호화
+        form.setPassword(passwordEncoder.encode(form.getPassword()));
+        memberService.join(form.toEntity());
+
+        /*
         Member member = new Member();
         member.setName(form.getName());
         //비밀번호 암호화
         member.setPassword(passwordEncoder.encode(form.getPassword()));
-        member.setRole("ROLE_USER");
         memberService.join(member);
+        */
 
         return "redirect:/";
     }

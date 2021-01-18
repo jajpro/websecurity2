@@ -11,10 +11,17 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model, Authentication authentication) {
         if (authentication != null) {
-            model.addAttribute("role", authentication.getAuthorities())
-                    .addAttribute("name", authentication.getName());
+            model.addAttribute(authentication);
         }
         return "home";
+    }
+
+    @GetMapping("/admin")
+    public String admin(Model model, Authentication authentication) {
+        if (authentication != null) {
+            model.addAttribute(authentication);
+        }
+        return "admin/admin";
     }
 
 }

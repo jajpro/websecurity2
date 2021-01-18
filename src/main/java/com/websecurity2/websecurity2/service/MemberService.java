@@ -1,5 +1,6 @@
 package com.websecurity2.websecurity2.service;
 
+import com.websecurity2.websecurity2.auth.Role;
 import com.websecurity2.websecurity2.domain.Member;
 import com.websecurity2.websecurity2.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,6 +42,7 @@ public class MemberService implements UserDetailsService {
                 });
     }
 
+
     /**
      * 로그인검증
      * @param username
@@ -54,16 +53,14 @@ public class MemberService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> byName = memberRepository.findByName(username);
         Member member = byName.orElseThrow(() -> new UsernameNotFoundException(username));
-        return new User(member.getName(), member.getPassword(), authorities(member.getRole()));
-    }
 
-    private Collection<? extends GrantedAuthority> authorities(String role) {
-        if(role.isEmpty()) {
-            //신규 ROLE 부여
-            return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
-        } else {
-            return Arrays.asList(new SimpleGrantedAuthority(role));
-        }
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if(member.getName().equals("admin"))
+            authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
+        else
+            authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
+
+        return new User(member.getName(), member.getPassword(), authorities);
     }
 
 
@@ -75,6 +72,7 @@ public class MemberService implements UserDetailsService {
         return memberRepository.findAll();
     }
 
+
     /**
      * 아이디조회
      * @param memberId
@@ -83,6 +81,7 @@ public class MemberService implements UserDetailsService {
     public Optional<Member> findOne(Long memberId) {
         return memberRepository.findById(memberId);
     }
+
 
     /**
      * 이름조회

@@ -6,8 +6,11 @@
         <h1>Hello Spring</h1>
         <p>Admin Page</p>
         <P>
-        <p th:text="${role}"></p>
+        <p th:text="${#authentication.name} + ' 님 로그인 되었습니다.' + ${#authentication.authorities}">Name</p>
         </P>
+    </div>
+    <div>
+        <a href="/">메인페이지</a>
     </div>
 </div> <!-- /container -->
 </body>

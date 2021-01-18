@@ -2,7 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div class="container">
-    <form action="/members/new" method="post">
+    <form th:action="@{/members/new}" method="post">
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <!--
+        form 에 히든 타입으로 csrf 토큰 값을 넘김
+        Spring Security 가 적용되면 POST 방식으로 보내는 모든 데이터는 csrf 토큰 값이 필요함
+        그러나 <form th:action="@{/members/new}" method="post"> 로 넘기면 히든 input 필요없이 자동으로 전달
+        -->
+
         <div class="form-group">
             <label for="name">이름</label>
             <input type="text" id="name" name="name" placeholder="이름을
