@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -38,6 +40,13 @@ public class MemberController {
         */
 
         return "redirect:/";
+    }
+
+    //중복회원 처리 로직
+    @ExceptionHandler(IllegalStateException.class)
+    public String err(Model model) {
+        model.addAttribute("error","error");
+    	return "error/duplicate";
     }
 
     @GetMapping("/members/signIn")

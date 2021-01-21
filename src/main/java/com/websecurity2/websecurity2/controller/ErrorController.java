@@ -1,10 +1,12 @@
 package com.websecurity2.websecurity2.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ErrorController {
+@Slf4j
+public class ErrorController extends Exception{
 
     @GetMapping("/error/denied")
     public String errorDenied() {
@@ -12,3 +14,4 @@ public class ErrorController {
     }
 
 }
+

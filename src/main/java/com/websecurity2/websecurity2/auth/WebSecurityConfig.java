@@ -20,13 +20,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception
     {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors().disable()
+                .cors().disable() //Cross-Origin Resource Sharing 동일한 출처(Origin: 최초 자원이 서비스된 출처)가 아니여도 다른 출처에서의 자원을 요청하여 쓸 수 있게 허용하는 구조
                 //.csrf().disable() //csrf() 적용 시 POST 로 보내는 모든 데이터는 히든 타입으로 form 에 넘기는 csrf 토큰 값이 필요.
                 .headers().frameOptions().disable();
 
@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority(Role.ADMIN.getValue())  //해당 리소스 ADMIN 만 접근가능
                 .antMatchers("/members").hasAnyRole("ADMIN", "USER")    //hasRole 류는 "ROLE_" 를 자동 첨부
                 .antMatchers("/members/new").anonymous()    //해당 리소스 로그인 되지 않은 사용자만 접근가능
-                .antMatchers("/", "/api/**", "/swagger-ui.html").permitAll()   //모든 사용자 접근가능
+                .antMatchers("/", "/api/**", "/swagger-ui.html", "/error/**").permitAll()   //모든 사용자 접근가능
                 .anyRequest().authenticated()   //모든 요청에 대해, 인증된 사용자만 접근하도록 설정
                 //로그인설정
                 .and()
